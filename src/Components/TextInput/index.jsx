@@ -1,8 +1,6 @@
 import {
-  TextField,
-  Typography
+  TextField
 } from '@mui/material';
-import { ErrorMessage } from 'formik';
 
 export const TextInputRequerid = (props) => {
 
@@ -25,3 +23,25 @@ export const TextInputRequerid = (props) => {
   )
 }
 
+export const TextMultiLineInputRequerid = (props) => {
+
+  const { name, label, formik } = props;
+
+  return (
+    <>
+      <TextField
+        id={name}
+        label={label}
+        helperText={formik.touched[name] && formik.errors[name] ? (formik.errors[name]) : ""}
+        error={formik.touched[name] && formik.errors[name]?true:false}
+        required
+        sx={{
+          margin:"10px"
+        }}
+        multiline
+        rows={4}
+        {...formik.getFieldProps(name)}
+      />
+    </>
+  )
+}
