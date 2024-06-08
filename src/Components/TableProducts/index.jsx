@@ -38,7 +38,7 @@ const TableProducts = (props) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {products.map((obj, index) => (
+                        {products.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((obj, index) => (
                             <TableRow key={index}>
                                 <TableCell component="th" scope="row" align="center">
                                     {obj.name}
