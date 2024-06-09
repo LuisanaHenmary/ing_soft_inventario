@@ -6,14 +6,15 @@ import {
     TableCell,
     TableRow,
     Paper,
-    TablePagination
+    TablePagination,
+    IconButton
 } from "@mui/material"
 import { useState } from "react"
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const TableProducts = (props) => {
 
-    const { products } = props;
+    const { products, openView } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -45,6 +46,12 @@ const TableProducts = (props) => {
                                 </TableCell>
                                 <TableCell align="center">{obj.price}</TableCell>
                                 <TableCell align="center">{obj.acount}</TableCell>
+
+                                <TableCell>
+                                    <IconButton onClick={() => openView(index)}>
+                                        <VisibilityIcon id={index} sx={{ color: "black" }} />
+                                    </IconButton>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
