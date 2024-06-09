@@ -2,15 +2,10 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import {
   Button,
-  Typography,
-  Dialog,
-  IconButton,
-  DialogTitle,
-  DialogContent,
   DialogActions
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { TextInputRequerid, TextMultiLineInputRequerid } from '../TextInput';
+import FormLayout from '../../layout/Form';
 
 
 const validationSchema = Yup.object({
@@ -39,58 +34,43 @@ const RegisterProduct = (props) => {
   const { saveFunction, isOpen, handleClose } = props
 
   return (
-    <Dialog
-      onClose={handleClose}
-      open={isOpen}
-      sx={{ padding: '10px ' }}
+    <FormLayout
+      submitFunction={saveFunction}
+      isOpen={isOpen}
+      handleClose={handleClose}
+      validationSchema={validationSchema}
+      initialValues={initialValues}
+      nameForm="Registrar producto"
     >
-      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant='p' sx={{ fontWeight: 'bold' }} >
-          Registrar producto
-        </Typography>
 
-        <IconButton aria-label="close" onClick={handleClose} sx={{ marginLeft: '8px' }}>
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
+      {formik => (
+        <form onSubmit={formik.handleSubmit}>
 
-      <DialogContent>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={(values) => {
-            saveFunction(values)
-          }}
-        >
-          {formik => (
-            <form onSubmit={formik.handleSubmit}>
+          <div style={{ margin: "10px" }}>
+            <TextInputRequerid name="name" label="Nombre del producto" formik={formik} />
+            <TextInputRequerid name="price" label="Precio" formik={formik} />
+          </div>
 
-              <div style={{ margin: "10px" }}>
-                <TextInputRequerid name="name" label="Nombre del producto" formik={formik} />
-                <TextInputRequerid name="price" label="Precio" formik={formik} />
-              </div>
+          <div style={{ margin: "10px" }}>
+            <TextInputRequerid name="acount" label="Cantidad" formik={formik} />
+            <TextMultiLineInputRequerid name="description" label="Descripción" formik={formik} />
+          </div>
 
-              <div style={{ margin: "10px" }}>
-                <TextInputRequerid name="acount" label="Cantidad" formik={formik} />
-                <TextMultiLineInputRequerid name="description" label="Descripción" formik={formik} />
-              </div>
+          <DialogActions>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ padding: "10px" }}
+            >
+              Agregar
+            </Button>
+          </DialogActions>
 
-              <DialogActions>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  sx={{ padding: "10px" }}
-                >
-                  Agregar
-                </Button>
-              </DialogActions>
+        </form>
+      )}
+    </FormLayout>
 
-            </form>
-          )}
-        </Formik>
-      </DialogContent>
-    </Dialog>
   );
 };
 
