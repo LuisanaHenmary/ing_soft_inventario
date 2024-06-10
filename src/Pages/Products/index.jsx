@@ -16,6 +16,9 @@ const initialValues = {
     price: '',
     acount: '',
     description: '',
+    brand: { id: "", name: "" },
+    category: { id: "", name: "" },
+    presentation: { id: "", name: "" }
 };
 
 const Textarea = styled(TextareaAutosize)(() => `
@@ -78,7 +81,16 @@ const Products = () => {
 
     useEffect(() => {
         const products = [
-            { name: "p1", price: 4.4, acount: 1, description: "Lore" },
+            {
+                name: "p1",
+                price: 4.4,
+                acount: 1,
+                description: "Lore",
+                brand: { id: "xxxxx1", name: "Marca1" },
+                category: { id: "xxxxx1", name: "Categoria1" },
+                presentation: { id: "xxxxx1", name: "Presentación1" }
+            },
+
         ]
 
         const categories = [
@@ -134,6 +146,13 @@ const Products = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Info name="Precio" value={selectInfo.price} />
                     <Info name="Cantidad" value={selectInfo.acount} />
+                    <Info name="Marca" value={selectInfo.brand.name} />
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                
+                <Info name="Categoria" value={selectInfo.category.name} />
+                <Info name="Presentación" value={selectInfo.presentation.name} />
                 </div>
 
                 <Info
