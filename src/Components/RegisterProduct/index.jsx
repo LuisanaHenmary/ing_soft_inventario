@@ -1,11 +1,8 @@
-import { Formik } from 'formik';
 import * as Yup from 'yup';
-import {
-  Button,
-  DialogActions
-} from '@mui/material';
 import { TextInputRequerid, TextMultiLineInputRequerid } from '../TextInput';
 import FormLayout from '../../layout/Form';
+import SelectField from '../SelectField';
+import { ButtonSubmit } from '../SubmitDialog';
 
 
 const validationSchema = Yup.object({
@@ -27,11 +24,21 @@ const initialValues = {
   price: '',
   acount: '',
   description: '',
+  category: 0,
+  brand:0,
+  presentation: 0,
 };
 
 const RegisterProduct = (props) => {
 
-  const { saveFunction, isOpen, handleClose } = props
+  const {
+    saveFunction,
+    isOpen,
+    handleClose,
+    categoryList,
+    brandList,
+    presentationList
+  } = props
 
   return (
     <FormLayout
@@ -56,16 +63,13 @@ const RegisterProduct = (props) => {
             <TextMultiLineInputRequerid name="description" label="Descripción" formik={formik} />
           </div>
 
-          <DialogActions>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ padding: "10px" }}
-            >
-              Agregar
-            </Button>
-          </DialogActions>
+          <SelectField name="category" label="Categoria" formik={formik} options={categoryList} />
+
+          <SelectField name="brand" label="Marca" formik={formik} options={brandList} />
+
+          <SelectField name="presentation" label="Presentación" formik={formik} options={presentationList} />
+         
+          <ButtonSubmit name_action="Agregar" />
 
         </form>
       )}

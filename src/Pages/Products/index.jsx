@@ -18,6 +18,9 @@ const initialValues = {
     price: '',
     acount: '',
     description: '',
+    brand: { id: "", name: "" },
+    category: { id: "", name: "" },
+    presentation: { id: "", name: "" }
 };
 
 const Textarea = styled(TextareaAutosize)(() => `
@@ -30,6 +33,9 @@ const Products = () => {
     const [add, setAdd] = useState(false);
     const [view, setView] = useState(false);
     const [selectInfo, setSelectInfo] = useState(initialValues)
+    const [listCategory, setListCategory] = useState([]);
+    const [listBrand, setListBrand] = useState([]);
+    const [listPresentation, setListPresentation] = useState([]);
 
     const testConect = collection(db, 'products')
 
@@ -52,9 +58,28 @@ const Products = () => {
 
     const addProduct = (values) => {
 
-        const { name, price, acount, description } = values
+        const {
+            name,
+            price,
+            acount,
+            description,
+            category,
+            brand,
+            presentation
+        } = values
+
         const new_list = listProducts.map((obj) => obj)
-        new_list.push({ name, price: parseFloat(price), acount: parseInt(acount), description })
+
+        new_list.push({
+            name,
+            price: parseFloat(price),
+            acount: parseInt(acount),
+            description,
+            category: listCategory[category],
+            brand: listBrand[brand],
+            presentation: listPresentation[presentation]
+        })
+
         setListProducts([])
         setListProducts(new_list)
 
@@ -64,7 +89,35 @@ const Products = () => {
 
 
     useEffect(() => {
+
         getData()
+
+        const categories = [
+            { id: "xxxxx1", name: "Categoria1" },
+            { id: "xxxxx2", name: "Categoria2" },
+            { id: "xxxxx3", name: "Categoria3" },
+            { id: "xxxxx4", name: "Categoria4" },
+        ]
+
+        const brands = [
+            { id: "xxxxx1", name: "Marca1" },
+            { id: "xxxxx2", name: "Marca2" },
+            { id: "xxxxx3", name: "Marca3" },
+            { id: "xxxxx4", name: "Marca4" },
+        ]
+
+        const presentations = [
+            { id: "xxxxx1", name: "Presentación1" },
+            { id: "xxxxx2", name: "Presentación2" },
+            { id: "xxxxx3", name: "Presentación3" },
+            { id: "xxxxx4", name: "Presentación4" },
+        ]
+
+
+        setListCategory(categories)
+        setListBrand(brands)
+        setListPresentation(presentations)
+
     }, [])
 
     return (
@@ -75,7 +128,16 @@ const Products = () => {
             </Typography>
 
             <ButtonAdd action={() => setAdd(true)} >Agregar producto</ButtonAdd>
-            <RegisterProduct saveFunction={addProduct} isOpen={add} handleClose={() => setAdd(false)} />
+
+            <RegisterProduct
+                saveFunction={addProduct}
+                isOpen={add}
+                handleClose={() => setAdd(false)}
+                categoryList={listCategory}
+                brandList={listBrand}
+                presentationList={listPresentation}
+            />
+
             <TableProducts products={listProducts} openView={openView} />
 
             <InfoCard name_section="Datos del producto" isOpen={view} handleClose={closeView}>
@@ -83,6 +145,13 @@ const Products = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Info name="Precio" value={selectInfo.price} />
                     <Info name="Cantidad" value={selectInfo.acount} />
+                    <Info name="Marca" value={selectInfo.brand.name} />
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                
+                <Info name="Categoria" value={selectInfo.category.name} />
+                <Info name="Presentación" value={selectInfo.presentation.name} />
                 </div>
 
                 <Info
