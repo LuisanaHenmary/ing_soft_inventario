@@ -2,11 +2,12 @@ import {
     Box,
     Typography,
     TextareaAutosize,
-    styled
+    styled,
+    Alert
 } from "@mui/material"
 import { useEffect, useState } from "react"
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase"; 
+import { collection, getDocs, doc, deleteDoc, addDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 import ButtonAdd from "../../Components/ButtonAdd";
 import TableProducts from "../../Components/TableProducts";
 import RegisterProduct from "../../Components/RegisterProduct";
@@ -18,9 +19,9 @@ const initialValues = {
     price: '',
     acount: '',
     description: '',
-    brand: { id: "", name: "" },
-    category: { id: "", name: "" },
-    presentation: { id: "", name: "" }
+    brand: '',
+    category: '',
+    presentation: ''
 };
 
 const Textarea = styled(TextareaAutosize)(() => `
@@ -36,27 +37,61 @@ const Products = () => {
     const [listCategory, setListCategory] = useState([]);
     const [listBrand, setListBrand] = useState([]);
     const [listPresentation, setListPresentation] = useState([]);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [message, setMessage] = useState("")
 
-    const testConect = collection(db, 'products')
+    const productsConnect = collection(db, 'products')
+    const categoryConnect = collection(db, 'categories')
+    const presentationConnect = collection(db, 'presentations')
+    const brandConnect = collection(db, 'brands')
 
-    const getData = async () =>{
-        const response = await getDocs(testConect)
-        setListProducts(response.docs.map((doc)=>({...doc.data(), id:doc.id})))
+    const getData = async () => {
+        try {
+            const responseProduct = await getDocs(productsConnect)
+            setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+
+            const responseCategory = await getDocs(categoryConnect)
+            setListCategory(responseCategory.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+
+            const responsePresentation = await getDocs(presentationConnect)
+            setListPresentation(responsePresentation.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+
+            const responseBrand = await getDocs(brandConnect)
+            setListBrand(responseBrand.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        } catch (e) {
+            console.error(e)
+        }
+
     }
 
-    const openView = (index) => {
 
+    const openView = (index) => {
+        setIsSuccess(false)
         const info = listProducts[index]
-        setSelectInfo(info)
+        const brand = listBrand.find((value) => { return value.id === info.id_brand }).name
+        const category = listCategory.find((value) => { return value.id === info.id_category }).name
+        const presentation = listPresentation.find((value) => { return value.id === info.id_presentation }).name
+
+
+        setSelectInfo({
+            name: info.name,
+            price: info.price,
+            acount: info.acount,
+            description: info.description,
+            brand,
+            category,
+            presentation
+        })
 
         setView(true);
     }
 
-    const closeView = () => {
-        setView(false);
-    };
+    const openAdd = () => {
+        setIsSuccess(false)
+        setAdd(true)
+    }
 
-    const addProduct = (values) => {
+    const addProduct = async (values) => {
 
         const {
             name,
@@ -68,23 +103,29 @@ const Products = () => {
             presentation
         } = values
 
-        const new_list = listProducts.map((obj) => obj)
+        try {
+            await addDoc(productsConnect, {
+                name,
+                price: parseFloat(price),
+                acount: parseInt(acount),
+                description,
+                id_category: listCategory[category].id,
+                id_brand: listBrand[brand].id,
+                id_presentation: listPresentation[presentation].id
+            })
 
-        new_list.push({
-            name,
-            price: parseFloat(price),
-            acount: parseInt(acount),
-            description,
-            category: listCategory[category],
-            brand: listBrand[brand],
-            presentation: listPresentation[presentation]
-        })
+            const responseProduct = await getDocs(productsConnect)
+            setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+            setMessage("Producto registrado exitosamente")
+            setIsSuccess(true)
+        }
+        catch (e) {
+            console.error(e)
+        }
+        finally {
+            setAdd(false)
+        }
 
-        setListProducts([])
-        setListProducts(new_list)
-
-        console.log(new_list)
-        setAdd(false)
     }
 
 
@@ -92,31 +133,6 @@ const Products = () => {
 
         getData()
 
-        const categories = [
-            { id: "xxxxx1", name: "Categoria1" },
-            { id: "xxxxx2", name: "Categoria2" },
-            { id: "xxxxx3", name: "Categoria3" },
-            { id: "xxxxx4", name: "Categoria4" },
-        ]
-
-        const brands = [
-            { id: "xxxxx1", name: "Marca1" },
-            { id: "xxxxx2", name: "Marca2" },
-            { id: "xxxxx3", name: "Marca3" },
-            { id: "xxxxx4", name: "Marca4" },
-        ]
-
-        const presentations = [
-            { id: "xxxxx1", name: "Presentación1" },
-            { id: "xxxxx2", name: "Presentación2" },
-            { id: "xxxxx3", name: "Presentación3" },
-            { id: "xxxxx4", name: "Presentación4" },
-        ]
-
-
-        setListCategory(categories)
-        setListBrand(brands)
-        setListPresentation(presentations)
 
     }, [])
 
@@ -127,7 +143,7 @@ const Products = () => {
                 Productos
             </Typography>
 
-            <ButtonAdd action={() => setAdd(true)} >Agregar producto</ButtonAdd>
+            <ButtonAdd action={openAdd} >Agregar producto</ButtonAdd>
 
             <RegisterProduct
                 saveFunction={addProduct}
@@ -140,18 +156,20 @@ const Products = () => {
 
             <TableProducts products={listProducts} openView={openView} />
 
-            <InfoCard name_section="Datos del producto" isOpen={view} handleClose={closeView}>
+            {isSuccess ? <Alert severity="success">{message}</Alert> : null}
+
+            <InfoCard name_section="Datos del producto" isOpen={view} handleClose={() => setView(false)}>
                 <Info name="Nombre del producto" value={selectInfo.name} />
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Info name="Precio" value={selectInfo.price} />
                     <Info name="Cantidad" value={selectInfo.acount} />
-                    <Info name="Marca" value={selectInfo.brand.name} />
+                    <Info name="Marca" value={selectInfo.brand} />
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                
-                <Info name="Categoria" value={selectInfo.category.name} />
-                <Info name="Presentación" value={selectInfo.presentation.name} />
+
+                    <Info name="Categoria" value={selectInfo.category} />
+                    <Info name="Presentación" value={selectInfo.presentation} />
                 </div>
 
                 <Info
