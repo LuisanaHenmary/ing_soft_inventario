@@ -13,8 +13,10 @@ import TableProducts from "../../Components/TableProducts";
 import RegisterProduct from "../../Components/RegisterProduct";
 import InfoCard from "../../layout/InfoCard"
 import Info from "../../Components/Info";
+import ConfirmWindow from "../../Components/ConfirmWindow";
 
 const initialValues = {
+    id: '',
     name: '',
     price: '',
     acount: '',
@@ -39,6 +41,8 @@ const Products = () => {
     const [listPresentation, setListPresentation] = useState([]);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState("")
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [idProduct, setIdProduct] = useState("")
 
     const productsConnect = collection(db, 'products')
     const categoryConnect = collection(db, 'categories')
@@ -91,6 +95,12 @@ const Products = () => {
         setAdd(true)
     }
 
+    const OpenConfirmDelete = (id) => {
+        setConfirmDelete(true)
+        setIsSuccess(false)
+        setIdProduct(id)
+    }
+
     const addProduct = async (values) => {
 
         const {
@@ -128,6 +138,17 @@ const Products = () => {
 
     }
 
+    const deleteProduct = async () => {
+        const product = doc(db, 'products', idProduct)
+        deleteDoc(product)
+
+        const responseProduct = await getDocs(productsConnect)
+        setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        setMessage("Producto eliminado exitosamente")
+        setIsSuccess(true)
+        setConfirmDelete(false)
+    }
+
 
     useEffect(() => {
 
@@ -154,9 +175,16 @@ const Products = () => {
                 presentationList={listPresentation}
             />
 
-            <TableProducts products={listProducts} openView={openView} />
+            <TableProducts products={listProducts} openView={openView} openDelete={OpenConfirmDelete} />
 
             {isSuccess ? <Alert severity="success">{message}</Alert> : null}
+
+            <ConfirmWindow
+                isOpen={confirmDelete}
+                handleClose={() => setConfirmDelete(false)}
+                agreeAction={() => deleteProduct()}
+                action="Borrar el registro"
+            />
 
             <InfoCard name_section="Datos del producto" isOpen={view} handleClose={() => setView(false)}>
                 <Info name="Nombre del producto" value={selectInfo.name} />
@@ -176,8 +204,6 @@ const Products = () => {
                     name="Descripción"
                     value={<Textarea placeholder={selectInfo.description} disabled maxRows={4} />}
                 />
-
-
             </InfoCard>
         </Box>
     )
