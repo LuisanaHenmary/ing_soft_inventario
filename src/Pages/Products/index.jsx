@@ -5,6 +5,8 @@ import {
     styled
 } from "@mui/material"
 import { useEffect, useState } from "react"
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase"; 
 import ButtonAdd from "../../Components/ButtonAdd";
 import TableProducts from "../../Components/TableProducts";
 import RegisterProduct from "../../Components/RegisterProduct";
@@ -28,6 +30,13 @@ const Products = () => {
     const [add, setAdd] = useState(false);
     const [view, setView] = useState(false);
     const [selectInfo, setSelectInfo] = useState(initialValues)
+
+    const testConect = collection(db, 'products')
+
+    const getData = async () =>{
+        const response = await getDocs(testConect)
+        setListProducts(response.docs.map((doc)=>({...doc.data(), id:doc.id})))
+    }
 
     const openView = (index) => {
 
@@ -55,12 +64,7 @@ const Products = () => {
 
 
     useEffect(() => {
-        const products = [
-            { name: "p1", price: 4.4, acount: 1, description: "Lore" },
-        ]
-
-        setListProducts(products)
-
+        getData()
     }, [])
 
     return (
