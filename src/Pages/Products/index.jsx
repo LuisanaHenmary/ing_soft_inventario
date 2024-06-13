@@ -37,11 +37,24 @@ const Products = () => {
     const [listBrand, setListBrand] = useState([]);
     const [listPresentation, setListPresentation] = useState([]);
 
-    const testConect = collection(db, 'products')
+    const productsConnect = collection(db, 'products')
+    const categoryConnect = collection(db, 'categories')
+    const presentationConnect = collection(db, 'presentations')
+    const brandConnect = collection(db, 'brands')
 
     const getData = async () =>{
-        const response = await getDocs(testConect)
-        setListProducts(response.docs.map((doc)=>({...doc.data(), id:doc.id})))
+        const responseProduct = await getDocs(productsConnect)
+        setListProducts(responseProduct.docs.map((doc)=>({...doc.data(), id:doc.id})))
+
+        const responseCategory = await getDocs(categoryConnect)
+        setListCategory(responseCategory.docs.map((doc)=>({...doc.data(), id:doc.id})))
+
+        const responsePresentation = await getDocs(presentationConnect)
+        setListPresentation(responsePresentation.docs.map((doc)=>({...doc.data(), id:doc.id})))
+
+        const responseBrand = await getDocs(brandConnect)
+        setListBrand(responseBrand.docs.map((doc)=>({...doc.data(), id:doc.id})))
+
     }
 
     const openView = (index) => {
@@ -91,32 +104,6 @@ const Products = () => {
     useEffect(() => {
 
         getData()
-
-        const categories = [
-            { id: "xxxxx1", name: "Categoria1" },
-            { id: "xxxxx2", name: "Categoria2" },
-            { id: "xxxxx3", name: "Categoria3" },
-            { id: "xxxxx4", name: "Categoria4" },
-        ]
-
-        const brands = [
-            { id: "xxxxx1", name: "Marca1" },
-            { id: "xxxxx2", name: "Marca2" },
-            { id: "xxxxx3", name: "Marca3" },
-            { id: "xxxxx4", name: "Marca4" },
-        ]
-
-        const presentations = [
-            { id: "xxxxx1", name: "Presentación1" },
-            { id: "xxxxx2", name: "Presentación2" },
-            { id: "xxxxx3", name: "Presentación3" },
-            { id: "xxxxx4", name: "Presentación4" },
-        ]
-
-
-        setListCategory(categories)
-        setListBrand(brands)
-        setListPresentation(presentations)
 
     }, [])
 
