@@ -1,20 +1,22 @@
 import {
     Box,
     Typography,
-    TextareaAutosize,
-    styled,
+    Chip,
     Alert
 } from "@mui/material"
 import { useEffect, useState } from "react"
-import { collection, getDocs, doc, deleteDoc, addDoc } from "firebase/firestore";
+import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import ButtonAdd from "../../Components/ButtonAdd";
 import TableProducts from "../../Components/TableProducts";
 import RegisterProduct from "../../Components/RegisterProduct";
 import InfoCard from "../../layout/InfoCard"
 import Info from "../../Components/Info";
+import ConfirmWindow from "../../Components/ConfirmWindow";
+import UpdateProduct from "../../Components/UpdateProduct";
 
 const initialValues = {
+    id: '',
     name: '',
     price: '',
     acount: '',
@@ -23,11 +25,6 @@ const initialValues = {
     category: '',
     presentation: ''
 };
-
-const Textarea = styled(TextareaAutosize)(() => `
-    width: 100%;
-  `,
-);
 
 const Products = () => {
     const [listProducts, setListProducts] = useState([]);
@@ -39,6 +36,9 @@ const Products = () => {
     const [listPresentation, setListPresentation] = useState([]);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState("")
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [idProduct, setIdProduct] = useState("")
+    const [edit, setEdit] = useState(false);
 
     const productsConnect = collection(db, 'products')
     const categoryConnect = collection(db, 'categories')
@@ -64,7 +64,6 @@ const Products = () => {
 
     }
 
-
     const openView = (index) => {
         setIsSuccess(false)
         const info = listProducts[index]
@@ -72,7 +71,7 @@ const Products = () => {
         const category = listCategory.find((value) => { return value.id === info.id_category }).name
         const presentation = listPresentation.find((value) => { return value.id === info.id_presentation }).name
 
-
+        setSelectInfo(initialValues)
         setSelectInfo({
             name: info.name,
             price: info.price,
@@ -89,6 +88,24 @@ const Products = () => {
     const openAdd = () => {
         setIsSuccess(false)
         setAdd(true)
+    }
+
+    const OpenConfirmDelete = (id) => {
+        setConfirmDelete(true)
+        setIsSuccess(false)
+        setIdProduct(id)
+    }
+
+    const openEdit = (index) => {
+        setIsSuccess(false)
+        setEdit(true)
+        setSelectInfo(initialValues)
+        setSelectInfo({
+            ...listProducts[index],
+            brand: listBrand.findIndex((value) => { return value.id === listProducts[index].id_brand }),
+            category: listCategory.findIndex((value) => { return value.id === listProducts[index].id_category }),
+            presentation: listPresentation.findIndex((value) => { return value.id === listProducts[index].id_presentation }),
+        })
     }
 
     const addProduct = async (values) => {
@@ -128,12 +145,58 @@ const Products = () => {
 
     }
 
+    const deleteProduct = async () => {
+        const product = doc(db, 'products', idProduct)
+        deleteDoc(product)
+
+        const responseProduct = await getDocs(productsConnect)
+        setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        setMessage("Producto eliminado exitosamente")
+        setIsSuccess(true)
+        setConfirmDelete(false)
+    }
+
+    const editProduct = async (values) => {
+
+        const product = doc(db, 'products', selectInfo.id)
+
+
+        const {
+            name,
+            price,
+            acount,
+            description,
+            category,
+            brand,
+            presentation
+        } = values
+
+        try {
+            await updateDoc(product, {
+                name,
+                price: parseFloat(price),
+                acount: parseInt(acount),
+                description,
+                id_category: listCategory[category].id,
+                id_brand: listBrand[brand].id,
+                id_presentation: listPresentation[presentation].id
+            })
+
+            const responseProduct = await getDocs(productsConnect)
+            setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+            setMessage("Producto actualizado exitosamente")
+            setIsSuccess(true)
+        }
+        catch (e) {
+            console.error(e)
+        }
+        finally {
+            setEdit(false)
+        }
+    }
 
     useEffect(() => {
-
         getData()
-
-
     }, [])
 
     return (
@@ -154,9 +217,21 @@ const Products = () => {
                 presentationList={listPresentation}
             />
 
-            <TableProducts products={listProducts} openView={openView} />
+            <TableProducts
+                products={listProducts}
+                openView={openView}
+                openDelete={OpenConfirmDelete}
+                openEdit={openEdit}
+            />
 
             {isSuccess ? <Alert severity="success">{message}</Alert> : null}
+
+            <ConfirmWindow
+                isOpen={confirmDelete}
+                handleClose={() => setConfirmDelete(false)}
+                agreeAction={() => deleteProduct()}
+                action="Borrar el registro"
+            />
 
             <InfoCard name_section="Datos del producto" isOpen={view} handleClose={() => setView(false)}>
                 <Info name="Nombre del producto" value={selectInfo.name} />
@@ -174,11 +249,29 @@ const Products = () => {
 
                 <Info
                     name="Descripción"
-                    value={<Textarea placeholder={selectInfo.description} disabled maxRows={4} />}
+                    value={<Chip
+                        sx={{
+                            height: 'auto',
+                            '& .MuiChip-label': {
+                                display: 'block',
+                                whiteSpace: 'normal',
+                            },
+                        }}
+                        label={selectInfo.description}
+                    />
+                    }
                 />
-
-
             </InfoCard>
+
+            <UpdateProduct
+                saveFunction={editProduct}
+                isOpen={edit}
+                handleClose={() => setEdit(false)}
+                defaultValues={selectInfo}
+                categoryList={listCategory}
+                brandList={listBrand}
+                presentationList={listPresentation}
+            />
         </Box>
     )
 }

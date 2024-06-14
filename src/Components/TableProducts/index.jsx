@@ -11,10 +11,12 @@ import {
 } from "@mui/material"
 import { useState } from "react"
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const TableProducts = (props) => {
 
-    const { products, openView } = props;
+    const { products, openView, openDelete, openEdit } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -50,6 +52,18 @@ const TableProducts = (props) => {
                                 <TableCell>
                                     <IconButton onClick={() => openView(index)}>
                                         <VisibilityIcon id={index} sx={{ color: "black" }} />
+                                    </IconButton>
+                                </TableCell>
+
+                                <TableCell>
+                                    <IconButton onClick={() => openDelete(obj.id)}>
+                                        <DeleteIcon id={index} sx={{ color: "black" }} />
+                                    </IconButton>
+                                </TableCell>
+
+                                <TableCell>
+                                    <IconButton onClick={() => openEdit(index)}>
+                                        <EditIcon id={index} sx={{ color: "black" }} />
                                     </IconButton>
                                 </TableCell>
                             </TableRow>
