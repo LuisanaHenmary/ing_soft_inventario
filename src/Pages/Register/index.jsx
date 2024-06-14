@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signUpWithCredentials } from '../../firebase/providers';
+import { useAuthentication } from '../../store/useAuthentication'
 
 import { Grid, TextField, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import './index.css';
 
 function Register() {
+  const { register } = useAuthentication();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,8 +29,7 @@ function Register() {
       console.log("Passwords do not match");
       return;
     }
-
-    signUpWithCredentials(formData.email, formData.password);
+    register(formData.email, formData.password)
 
   };
 

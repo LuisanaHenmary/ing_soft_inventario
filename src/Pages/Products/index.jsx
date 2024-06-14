@@ -7,7 +7,7 @@ import {
 } from "@mui/material"
 import { useEffect, useState } from "react"
 import { collection, getDocs, doc, deleteDoc, addDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
+import { db } from "../../firebase";
 import ButtonAdd from "../../Components/ButtonAdd";
 import TableProducts from "../../Components/TableProducts";
 import RegisterProduct from "../../Components/RegisterProduct";

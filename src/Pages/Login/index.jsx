@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuthentication } from '../../store/useAuthentication'
 
 import { Grid, TextField, Button } from '@mui/material';
 import { Link } from "react-router-dom";
@@ -6,6 +7,7 @@ import { Link } from "react-router-dom";
 import './index.css';
 
 function Login() {
+  const { login } = useAuthentication();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,7 +21,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    login(email, password);
   };
 
   return (

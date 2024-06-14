@@ -7,6 +7,6 @@ function Dashboard() {
       <Outlet />
     </div>
   );
-};
+}
 
 export default Dashboard;
