@@ -1,8 +1,9 @@
+import { useState } from 'react';
+
 import { Grid, TextField, Button } from '@mui/material';
 import { Link } from "react-router-dom";
 
 import './index.css';
-import { useState } from 'react';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -16,10 +17,9 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
+
   };
 
   return (
