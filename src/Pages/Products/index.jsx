@@ -2,7 +2,9 @@ import {
     Box,
     Typography,
     Chip,
-    Alert
+    Alert,
+    DialogActions,
+    Button
 } from "@mui/material"
 import { useEffect, useState } from "react"
 import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc } from "firebase/firestore";
@@ -73,6 +75,7 @@ const Products = () => {
 
         setSelectInfo(initialValues)
         setSelectInfo({
+            index,
             name: info.name,
             price: info.price,
             acount: info.acount,
@@ -97,6 +100,7 @@ const Products = () => {
     }
 
     const openEdit = (index) => {
+        setView(false)
         setIsSuccess(false)
         setEdit(true)
         setSelectInfo(initialValues)
@@ -159,7 +163,6 @@ const Products = () => {
     const editProduct = async (values) => {
 
         const product = doc(db, 'products', selectInfo.id)
-
 
         const {
             name,
@@ -261,6 +264,17 @@ const Products = () => {
                     />
                     }
                 />
+
+                {//Esto es para cuando se integre el login para admin
+                false ?
+                    <DialogActions>
+                        <Button
+                            variant="outlined"
+                            onClick={()=>openEdit(selectInfo.index)}
+                        >
+                            Editar
+                        </Button>
+                    </DialogActions> : null}
             </InfoCard>
 
             <UpdateProduct
