@@ -8,6 +8,8 @@ import Products from '../Pages/Products';
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import Dashboard from '../Pages/Dashboard';
+import Suppliers from '../Pages/Suppliers';
+import SupplierForm from '../Pages/Suppliers/edit';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,8 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="child" replace /> },
       { path: 'child', element: <App /> },
       { path: 'products', element: <Products /> },
+      { path: 'suppliers', element: <Suppliers /> },
+      { path: 'supplier-details', element: <SupplierForm /> },
     ]
   }
 ]);
