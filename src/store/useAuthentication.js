@@ -21,6 +21,7 @@ export const useAuthentication = create(
           );
           set({ userID: user, error: null });
         } catch (error) {
+          window.alert('Ususrio o contraseña incorrectos');
           set({ error: error.message });
         }
       },
@@ -34,6 +35,7 @@ export const useAuthentication = create(
           console.log(user);
           set({ userID: user.uid, error: null });
         } catch (error) {
+          window.alert('Email ya registrado');
           set({ error: error.message });
         }
       },
