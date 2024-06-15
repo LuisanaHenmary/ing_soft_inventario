@@ -16,6 +16,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <PublicRoute />,
     children: [
+      { index: true, element: <Navigate to="register" replace /> },
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
     ],
