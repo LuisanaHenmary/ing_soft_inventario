@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import ProtectedRoute from '../Components/ProtectedRoute ';
+import ProtectedRoute from '../Components/ProtectedRoute';
 import PublicRoute from '../Components/PublicRoute';
 
 import App from '../App';
