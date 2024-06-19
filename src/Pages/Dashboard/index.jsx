@@ -18,6 +18,10 @@ function Dashboard() {
       name: "Proveedores",
     },
     {
+      path: "/warehouses",
+      name: "Almacenes",
+    },
+    {
       path: "/logout",
       name: "Cerrar sesion",
     }

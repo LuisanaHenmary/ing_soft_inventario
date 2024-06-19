@@ -10,6 +10,8 @@ import Register from '../Pages/Register';
 import Dashboard from '../Pages/Dashboard';
 import Suppliers from '../Pages/Suppliers';
 import SupplierForm from '../Pages/Suppliers/edit';
+import Warehouses from '../Pages/Warehouses';
+import WarehousesForm from '../Pages/Warehouses/edit';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,8 @@ const router = createBrowserRouter([
       { path: 'products', element: <Products /> },
       { path: 'suppliers', element: <Suppliers /> },
       { path: 'supplier-details', element: <SupplierForm /> },
+      { path: 'warehouses', element: <Warehouses /> },
+      { path: 'warehouse-details', element: <WarehousesForm /> },
     ]
   }
 ]);
