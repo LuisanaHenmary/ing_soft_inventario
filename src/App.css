@@ -185,6 +185,114 @@
   background-color: #e0a800;
 }
 
+/* Warehouses.css */
+.warehouses {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.warehouses__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.warehouses__title {
+  font-size: 24px;
+  margin: 0;
+  color: #333;
+}
+
+.warehouses__add-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.warehouses__add-button:hover {
+  background-color: #0056b3;
+}
+
+.warehouses__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.warehouses__list-header,
+.warehouses__item {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.warehouses__list-header {
+  background-color: #0056b3;
+  font-weight: bold;
+}
+
+.warehouses__name, .warehouses__location, .warehouses__phone {
+  font-size: 16px;
+  color: #333;
+}
+
+.warehouses__buttons {
+  text-align: right;
+  display: flex;
+  gap: 5px;
+  justify-content: flex-start;
+}
+
+.warehouses__header-actions {
+  justify-self: flex-start; 
+}
+
+.warehouses__button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.warehouses__delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.warehouses__delete:hover {
+  background-color: #c82333;
+}
+
+.warehouses__show {
+  background-color: #28a745;
+  color: white;
+}
+
+.warehouses__show:hover {
+  background-color: #218838;
+}
+
+.warehouses__edit {
+  background-color: #ffc107;
+  color: black;
+}
+
+.warehouses__edit:hover {
+  background-color: #e0a800;
+}
+
+
 /* SuppliersForm.css */
 .contact-form {
   display: flex;
