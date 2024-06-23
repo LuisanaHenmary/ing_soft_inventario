@@ -1,21 +1,15 @@
 import * as Yup from 'yup';
-import { TextInputRequerid } from '../TextInput';
 import FormLayout from '../../layout/Form';
 import SelectField from '../SelectField';
 import { ButtonSubmit } from '../SubmitDialog';
 import useStoreGlobal from "../../store/useStoreGlobal";
+import { FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { useEffect } from 'react';
 
-const validationSchema = Yup.object({
-    number_mov: Yup.number().typeError('Debe ser un número')
-        .required('Requerido')
-    ,
-});
 
 const initialValues = {
-    number_mov: '',
-    type_mov:0,
-    supplier:0,
-    warehouses: 0,
+    type_mov: 0,
+    person: 0,
 };
 
 
@@ -33,33 +27,42 @@ const RegisterMovement = (props) => {
 
     return (
         <>
-        {listSuppliers.length>0 && listWarehouses.length>0?<FormLayout
-            submitFunction={saveFunction}
-            isOpen={isOpen}
-            handleClose={handleClose}
-            validationSchema={validationSchema}
-            initialValues={initialValues}
-            nameForm="Registrar movimiento"
-        >
+            {listSuppliers.length > 0 && listWarehouses.length > 0 ? <FormLayout
+                submitFunction={saveFunction}
+                isOpen={isOpen}
+                handleClose={handleClose}
+                initialValues={initialValues}
+                nameForm="Registrar movimiento"
+            >
 
-            {formik => (
-                <form onSubmit={formik.handleSubmit}>
+                {formik => (
+                    <form onSubmit={formik.handleSubmit}>
 
-                    <div style={{ margin: "10px" }}>
-                        <TextInputRequerid name="number_mov" label="Numero" formik={formik} />
-                    </div>
+                        <div style={{ margin: "10px" }}>
+                            <FormControl>
+                                <RadioGroup
+                                    name="type_mov"
+                                    id="type_mov"
+                                    formik={formik}
+                                    {...formik.getFieldProps("type_mov")}
+                                >
+                                    {types_mov.map((obj, index) => (
+                                        <FormControlLabel value={index} key={index} control={<Radio size="small" />} label={obj.name} />
+                                    ))}
 
-                    <SelectField name="type_mov" label="Tipo" formik={formik} options={types_mov} />
+                                </RadioGroup>
+                            </FormControl>
 
-                    <SelectField name="supplier" label="Proveedor" formik={formik} options={listSuppliers} />
+                        </div>
 
-                    <SelectField name="warehouses" label="Almacen" formik={formik} options={listWarehouses} />
+                        {parseInt(formik.values.type_mov) === 0 ? <SelectField name="person" label="Proveedor" formik={formik} options={listSuppliers} /> :
+                            <SelectField name="person" label="Almacen" formik={formik} options={listWarehouses} />
+                        }
 
-                    <ButtonSubmit name_action="Agregar" />
-
-                </form>
-            )}
-        </FormLayout>:<div>No hay proveedores y/o almacenes registrados</div>}
+                        <ButtonSubmit name_action="Agregar" />
+                    </form>
+                )}
+            </FormLayout> : <div>No hay proveedores y/o almacenes registrados</div>}
         </>
 
     );

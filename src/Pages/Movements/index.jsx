@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { Box, Alert } from "@mui/material";
+import { useState } from "react"
+import { Box, Alert, Typography } from "@mui/material";
 import RegisterMovement from "../../Components/RegisterMovement"
 import ButtonAdd from "../../Components/ButtonAdd";
 import useStoreGlobal from "../../store/useStoreGlobal";
@@ -44,27 +44,38 @@ const Movements = () => {
     const addMovemnt = async (values) => {
 
         const {
-            number_mov,
             type_mov,
-            supplier,
-            warehouses,
+            person
         } = values
 
+        const typ = parseInt(type_mov)
         const now = new Date();
         const date = `${now.getDate()}/${now.getMonth()}/${now.getFullYear()}`
         const time = `${now.getHours()}:${now.getMinutes()}`
 
         try {
-            await addDoc(movementConnet, {
-                number_mov: parseInt(number_mov),
-                type_mov: types[type_mov].name,
-                id_supplier: listSuppliers[supplier].idDocument,
-                id_warehouse: listWarehouses[warehouses].idDocument,
-                user_id: userID.toString(),
-                date,
-                time
-            })
 
+            if(typ===0){
+                await addDoc(movementConnet, {
+                    type_mov: types[typ].name,
+                    id_supplier: listSuppliers[person].idDocument,
+                    user_id: userID.toString(),
+                    date,
+                    time
+                })
+            }
+
+            if(typ===1){
+                await addDoc(movementConnet, {
+                    type_mov: types[typ].name,
+                    id_warehouse: listWarehouses[person].idDocument,
+                    user_id: userID.toString(),
+                    date,
+                    time
+                })
+            }
+            
+//
             renderList()
 
             setMessage("Movimiento registrado exitosamente")
@@ -95,7 +106,9 @@ const Movements = () => {
 
     return (
         <Box>
-            fuck you
+            <Typography variant='h4' sx={{ fontWeight: 'bold', marginBottom: "10px" }} >
+                Movimientos
+            </Typography>
             <ButtonAdd action={openAdd} >Agregar Movimiento</ButtonAdd>
 
             <TableMovements deleteFunction={deleteMovement} />
