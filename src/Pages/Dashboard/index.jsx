@@ -22,6 +22,14 @@ function Dashboard() {
       name: "Almacenes",
     },
     {
+      path: "/brand",
+      name: "Marca",
+    },
+    {
+      path: "/category",
+      name: "Categoria",
+    },
+    {
       path: "/logout",
       name: "Cerrar sesion",
     }

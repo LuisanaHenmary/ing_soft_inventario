@@ -10,6 +10,12 @@ const useStoreGlobal = create((set) => ({
   
   listWarehouses: [],
   setWarehouses: (warehouses) => set({ listWarehouses: warehouses }),
+
+  listBrands: [],
+  setBrands: (Brands) => set({ listBrands: Brands }),
+
+  listCategories: [],
+  setCategories: (categories) => set({ listCategories: categories }),
   // addSuppliers: (newContact) =>
   //   set((state) => ({ contacts: [...state.contacts, newContact] })),
   // updateSuppliers: (updatedContact) =>
