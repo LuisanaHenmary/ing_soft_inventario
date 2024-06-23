@@ -2,7 +2,6 @@ import { createBrowserRouter, Navigate } from 'react-router-dom';
 import ProtectedRoute from '../Components/ProtectedRoute';
 import PublicRoute from '../Components/PublicRoute';
 
-import App from '../App';
 import Products from '../Pages/Products';
 
 import Login from '../Pages/Login';
@@ -28,8 +27,7 @@ const router = createBrowserRouter([
     path: '/dashboard',
     element: <ProtectedRoute Dashboard={Dashboard} />,
     children: [
-      { index: true, element: <Navigate to="child" replace /> },
-      { path: 'child', element: <App /> },
+      { index: true, element: <Navigate to="products" replace /> },
       { path: 'products', element: <Products /> },
       { path: 'suppliers', element: <Suppliers /> },
       { path: 'supplier-details', element: <SupplierForm /> },

@@ -1,5 +1,8 @@
+import { Link, useNavigate, Outlet } from "react-router-dom";
+import { useAuthentication } from "../../store/useAuthentication";
+import Loader from "../../Components/Loader/loader";
+import './index.css';
 import { useEffect } from "react"
-import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import Loader from "../../Components/Loader/loader";
 import useStoreGlobal from "../../store/useStoreGlobal";
@@ -10,6 +13,8 @@ import {
 } from "firebase/firestore";
 
 function Dashboard() {
+  const logout = useAuthentication((state) => state.logout);
+  const navigate = useNavigate();
 
   const rutes = [
     {
@@ -28,6 +33,7 @@ function Dashboard() {
       path: "/warehouses",
       name: "Almacenes",
     },
+  
     {
       path: "/movements",
       name: "Movimientos",
@@ -37,6 +43,11 @@ function Dashboard() {
       name: "Cerrar sesion",
     }
   ]
+  
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  }
 
 
   const setSuppliers = useStoreGlobal((state) => state.setSuppliers);
@@ -132,6 +143,9 @@ function Dashboard() {
               <Link to={`/dashboard${route.path}`}>{route.name}</Link>
             </li>
           ))}
+          <button className="sidebar__menu-item_button" onClick={handleLogout}>
+            Logout
+          </button>
         </ul>
       </div>
       <Outlet />
