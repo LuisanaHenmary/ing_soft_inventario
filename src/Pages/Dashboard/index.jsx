@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
-import { Outlet } from "react-router-dom";
+import { Link, useNavigate, Outlet } from "react-router-dom";
+import { useAuthentication } from "../../store/useAuthentication";
 import Loader from "../../Components/Loader/loader";
+import './index.css';
 
 function Dashboard() {
+  const logout = useAuthentication((state) => state.logout);
+  const navigate = useNavigate();
 
   const rutes = [
     {
@@ -21,11 +24,13 @@ function Dashboard() {
       path: "/warehouses",
       name: "Almacenes",
     },
-    {
-      path: "/logout",
-      name: "Cerrar sesion",
-    }
   ]
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  }
+
   return (
     <div className="dashboard">
       <div className="sidebar">
@@ -36,6 +41,9 @@ function Dashboard() {
               <Link to={`/dashboard${route.path}`}>{route.name}</Link>
             </li>
           ))}
+          <button className="sidebar__menu-item_button" onClick={handleLogout}>
+            Logout
+          </button>
         </ul>
       </div>
       <Outlet />
