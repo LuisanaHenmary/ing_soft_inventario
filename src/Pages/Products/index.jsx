@@ -1,12 +1,5 @@
-import {
-    Box,
-    Typography,
-    Chip,
-    Alert,
-    DialogActions,
-    Button
-} from "@mui/material"
-import { useEffect, useState } from "react"
+import {Box,Typography,Chip,Alert,DialogActions,Button} from "@mui/material"
+import { useState } from "react"
 import { collection, getDocs, doc, deleteDoc, addDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import ButtonAdd from "../../Components/ButtonAdd";
@@ -16,6 +9,8 @@ import InfoCard from "../../layout/InfoCard"
 import Info from "../../Components/Info";
 import ConfirmWindow from "../../Components/ConfirmWindow";
 import UpdateProduct from "../../Components/UpdateProduct";
+import useStoreGlobal from "../../store/useStoreGlobal";
+
 
 const initialValues = {
     id: '',
@@ -29,49 +24,29 @@ const initialValues = {
 };
 
 const Products = () => {
-    const [listProducts, setListProducts] = useState([]);
+  const productsConnect = collection(db, "products");
+
+    const listProducts = useStoreGlobal((state) => state.listProducts);
+    const setProducts = useStoreGlobal((state) => state.setProducts);
+    const listBrand = useStoreGlobal((state) => state.listBrands);
+    const listCategory = useStoreGlobal((state) => state.listCategories);
+    const listPresentation = useStoreGlobal((state) => state.listPresentations);
+
     const [add, setAdd] = useState(false);
     const [view, setView] = useState(false);
     const [selectInfo, setSelectInfo] = useState(initialValues)
-    const [listCategory, setListCategory] = useState([]);
-    const [listBrand, setListBrand] = useState([]);
-    const [listPresentation, setListPresentation] = useState([]);
     const [isSuccess, setIsSuccess] = useState(false);
     const [message, setMessage] = useState("")
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [idProduct, setIdProduct] = useState("")
     const [edit, setEdit] = useState(false);
 
-    const productsConnect = collection(db, 'products')
-    const categoryConnect = collection(db, 'categories')
-    const presentationConnect = collection(db, 'presentations')
-    const brandConnect = collection(db, 'brands')
-
-    const getData = async () => {
-        try {
-            const responseProduct = await getDocs(productsConnect)
-            setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-
-            const responseCategory = await getDocs(categoryConnect)
-            setListCategory(responseCategory.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-
-            const responsePresentation = await getDocs(presentationConnect)
-            setListPresentation(responsePresentation.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-
-            const responseBrand = await getDocs(brandConnect)
-            setListBrand(responseBrand.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-        } catch (e) {
-            console.error(e)
-        }
-
-    }
-
     const openView = (index) => {
         setIsSuccess(false)
         const info = listProducts[index]
-        const brand = listBrand.find((value) => { return value.id === info.id_brand }).name
-        const category = listCategory.find((value) => { return value.id === info.id_category }).name
-        const presentation = listPresentation.find((value) => { return value.id === info.id_presentation }).name
+        const brand = listBrand.find((value) => { return value.idDocument === info.id_brand }).name
+        const category = listCategory.find((value) => { return value.idDocument === info.id_category }).name
+        const presentation = listPresentation.find((value) => { return value.idDocument === info.id_presentation }).name
 
         setSelectInfo(initialValues)
         setSelectInfo({
@@ -93,6 +68,15 @@ const Products = () => {
         setAdd(true)
     }
 
+    const renderList = async () =>{
+        const responseProduct = await getDocs(productsConnect)
+      const listProducts = responseProduct.docs.map((doc) => ({
+        ...doc.data(),
+        idDocument: doc.id,
+      }));
+      setProducts(listProducts)
+    }
+
     const OpenConfirmDelete = (id) => {
         setConfirmDelete(true)
         setIsSuccess(false)
@@ -100,16 +84,24 @@ const Products = () => {
     }
 
     const openEdit = (index) => {
+        const info = listProducts[index]
+        const brand = listBrand.findIndex((value) => { return value.idDocument === listProducts[index].id_brand })
+        const category = listCategory.findIndex((value) => { return value.idDocument === listProducts[index].id_category })
+        const presentation = listPresentation.findIndex((value) => { return value.idDocument === listProducts[index].id_presentation })
         setView(false)
         setIsSuccess(false)
-        setEdit(true)
         setSelectInfo(initialValues)
         setSelectInfo({
-            ...listProducts[index],
-            brand: listBrand.findIndex((value) => { return value.id === listProducts[index].id_brand }),
-            category: listCategory.findIndex((value) => { return value.id === listProducts[index].id_category }),
-            presentation: listPresentation.findIndex((value) => { return value.id === listProducts[index].id_presentation }),
+            idDocument: info.idDocument,
+            name: info.name,
+            price: info.price,
+            acount: info.acount,
+            description: info.description,
+            brand,
+            category,
+            presentation
         })
+        setEdit(true)
     }
 
     const addProduct = async (values) => {
@@ -130,13 +122,12 @@ const Products = () => {
                 price: parseFloat(price),
                 acount: parseInt(acount),
                 description,
-                id_category: listCategory[category].id,
-                id_brand: listBrand[brand].id,
-                id_presentation: listPresentation[presentation].id
+                id_category: listCategory[category].idDocument,
+                id_brand: listBrand[brand].idDocument,
+                id_presentation: listPresentation[presentation].idDocument
             })
 
-            const responseProduct = await getDocs(productsConnect)
-            setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+            renderList()
             setMessage("Producto registrado exitosamente")
             setIsSuccess(true)
         }
@@ -153,16 +144,13 @@ const Products = () => {
         const product = doc(db, 'products', idProduct)
         deleteDoc(product)
 
-        const responseProduct = await getDocs(productsConnect)
-        setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+        renderList()
         setMessage("Producto eliminado exitosamente")
         setIsSuccess(true)
         setConfirmDelete(false)
     }
 
     const editProduct = async (values) => {
-
-        const product = doc(db, 'products', selectInfo.id)
 
         const {
             name,
@@ -175,18 +163,18 @@ const Products = () => {
         } = values
 
         try {
+            const product = doc(db, 'products', selectInfo.idDocument)
             await updateDoc(product, {
                 name,
                 price: parseFloat(price),
                 acount: parseInt(acount),
                 description,
-                id_category: listCategory[category].id,
-                id_brand: listBrand[brand].id,
-                id_presentation: listPresentation[presentation].id
+                id_category: listCategory[category].idDocument,
+                id_brand: listBrand[brand].idDocument,
+                id_presentation: listPresentation[presentation].idDocument
             })
 
-            const responseProduct = await getDocs(productsConnect)
-            setListProducts(responseProduct.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+            renderList()
             setMessage("Producto actualizado exitosamente")
             setIsSuccess(true)
         }
@@ -197,10 +185,6 @@ const Products = () => {
             setEdit(false)
         }
     }
-
-    useEffect(() => {
-        getData()
-    }, [])
 
     return (
         <Box>
@@ -215,9 +199,6 @@ const Products = () => {
                 saveFunction={addProduct}
                 isOpen={add}
                 handleClose={() => setAdd(false)}
-                categoryList={listCategory}
-                brandList={listBrand}
-                presentationList={listPresentation}
             />
 
             <TableProducts
@@ -282,9 +263,6 @@ const Products = () => {
                 isOpen={edit}
                 handleClose={() => setEdit(false)}
                 defaultValues={selectInfo}
-                categoryList={listCategory}
-                brandList={listBrand}
-                presentationList={listPresentation}
             />
         </Box>
     )

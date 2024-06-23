@@ -11,6 +11,7 @@ import Suppliers from '../Pages/Suppliers';
 import SupplierForm from '../Pages/Suppliers/edit';
 import Warehouses from '../Pages/Warehouses';
 import WarehousesForm from '../Pages/Warehouses/edit';
+import Movements from '../Pages/Movements';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: 'supplier-details', element: <SupplierForm /> },
       { path: 'warehouses', element: <Warehouses /> },
       { path: 'warehouse-details', element: <WarehousesForm /> },
+      {path:'movements', element: <Movements />}
     ]
   }
 ]);
