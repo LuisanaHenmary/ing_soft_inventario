@@ -27,8 +27,8 @@ const router = createBrowserRouter([
     path: '/dashboard',
     element: <ProtectedRoute Dashboard={Dashboard} />,
     children: [
-      { index: true, element: <Navigate to="child" replace /> },
-      { path: 'child', element: <App /> },
+      { index: true, element: <Navigate to="products" replace /> },
+      // { path: 'child', element: <App /> },
       { path: 'products', element: <Products /> },
       { path: 'suppliers', element: <Suppliers /> },
       { path: 'supplier-details', element: <SupplierForm /> },
