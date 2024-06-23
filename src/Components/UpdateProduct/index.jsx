@@ -3,7 +3,7 @@ import { TextInputRequerid, TextMultiLineInputRequerid } from '../TextInput';
 import FormLayout from '../../layout/Form';
 import SelectField from '../SelectField';
 import { ButtonSubmit } from '../SubmitDialog';
-
+import useStoreGlobal from "../../store/useStoreGlobal";
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Requiredo'),
@@ -23,13 +23,14 @@ const validationSchema = Yup.object({
 
 const UpdateProduct = (props) => {
 
+  const listBrand = useStoreGlobal((state) => state.listBrands);
+  const listCategory = useStoreGlobal((state) => state.listCategories);
+  const listPresentation = useStoreGlobal((state) => state.listPresentations);
+
   const {
     saveFunction,
     isOpen,
     handleClose,
-    categoryList,
-    brandList,
-    presentationList,
     defaultValues
   } = props
 
@@ -56,12 +57,12 @@ const UpdateProduct = (props) => {
             <TextMultiLineInputRequerid name="description" label="Descripción" formik={formik} />
           </div>
 
-          <SelectField name="category" label="Categoria" formik={formik} options={categoryList} />
+          <SelectField name="category" label="Categoria" formik={formik} options={listCategory} />
 
-          <SelectField name="brand" label="Marca" formik={formik} options={brandList} />
+          <SelectField name="brand" label="Marca" formik={formik} options={listBrand} />
 
-          <SelectField name="presentation" label="Presentación" formik={formik} options={presentationList} />
-         
+          <SelectField name="presentation" label="Presentación" formik={formik} options={listPresentation} />
+
           <ButtonSubmit name_action="Guardar" />
 
         </form>

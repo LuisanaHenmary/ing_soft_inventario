@@ -56,7 +56,7 @@ const TableProducts = (props) => {
                                 </TableCell>
 
                                 <TableCell>
-                                    <IconButton onClick={() => openDelete(obj.id)}>
+                                    <IconButton onClick={() => openDelete(obj.idDocument)}>
                                         <DeleteIcon id={index} sx={{ color: "black" }} />
                                     </IconButton>
                                 </TableCell>

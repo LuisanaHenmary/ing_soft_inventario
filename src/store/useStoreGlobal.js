@@ -25,6 +25,19 @@ const useStoreGlobal = create((set) => ({
 
   listMovements: [],
   setMovements: (movements) => set({ listMovements: movements }),
+
+  listPresentations: [],
+  setPresentations: (presentations) => set({ listPresentations: presentations }),
+
+  listBrands: [],
+  setBrands: (brands) => set({ listBrands: brands }),
+
+  listCategories: [],
+  setCategories: (categories) => set({ listCategories: categories }),
+
+  listProducts: [],
+  setProducts: (products) => set({ listProducts: products }),
+
 }));
 
 export default useStoreGlobal;

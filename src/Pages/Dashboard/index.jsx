@@ -6,11 +6,7 @@ import useStoreGlobal from "../../store/useStoreGlobal";
 import { db } from "../../firebase";
 import {
   collection,
-  getDocs,
-  doc,
-  deleteDoc,
-  addDoc,
-  updateDoc,
+  getDocs
 } from "firebase/firestore";
 
 function Dashboard() {
@@ -45,15 +41,21 @@ function Dashboard() {
 
   const setSuppliers = useStoreGlobal((state) => state.setSuppliers);
   const setWarehouses = useStoreGlobal((state) => state.setWarehouses);
-  const setProducts = useStoreGlobal((state) => state.setProducts);
   const setMovements = useStoreGlobal((state) => state.setMovements);
+  const setProducts = useStoreGlobal((state) => state.setProducts);
+  const setPresentations = useStoreGlobal((state) => state.setPresentations);
+  const setBrands = useStoreGlobal((state) => state.setBrands);
+  const setCategories = useStoreGlobal((state) => state.setCategories);
   const setLoader = useStoreGlobal((state) => state.setLoader);
 
 
   const supplierConnect = collection(db, "suppliers");
   const warehouseCollection = collection(db, "warehouses");
-  const productsConnect = collection(db, "products");
   const movementConnect = collection(db, "movements");
+  const categoryConnect = collection(db, 'categories')
+  const presentationConnect = collection(db, 'presentations')
+  const brandConnect = collection(db, 'brands')
+  const productsConnect = collection(db, "products");
 
   const getAllList = async () => {
     try {
@@ -71,19 +73,40 @@ function Dashboard() {
       }));
       setSuppliers(listSupplier);
 
-      const responseProduct = await getDocs(productsConnect)
-      const listProduct = responseProduct.docs.map((doc) => ({
-        ...doc.data(),
-        idDocument: doc.id,
-      }));
-      setProducts(listProduct)
-
       const responseMovement = await getDocs(movementConnect)
       const listMovements = responseMovement.docs.map((doc) => ({
         ...doc.data(),
         idDocument: doc.id,
       }));
       setMovements(listMovements)
+
+      const responseProduct = await getDocs(productsConnect)
+      const listProducts = responseProduct.docs.map((doc) => ({
+        ...doc.data(),
+        idDocument: doc.id,
+      }));
+      setProducts(listProducts)
+
+      const responseCategory = await getDocs(categoryConnect)
+      const listCategories = responseCategory.docs.map((doc) => ({
+        ...doc.data(),
+        idDocument: doc.id,
+      }));
+      setCategories(listCategories)
+
+      const responsePresentation = await getDocs(presentationConnect)
+      const listPresentations = responsePresentation.docs.map((doc) => ({
+        ...doc.data(),
+        idDocument: doc.id,
+      }));
+      setPresentations(listPresentations)
+
+      const responseBrand = await getDocs(brandConnect)
+      const listBrands = responseBrand.docs.map((doc) => ({
+        ...doc.data(),
+        idDocument: doc.id,
+      }));
+      setBrands(listBrands)
 
     } catch (error) {
       console.error("Error fetching:", error);
