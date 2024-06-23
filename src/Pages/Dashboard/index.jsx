@@ -33,6 +33,18 @@ function Dashboard() {
     },
   
     {
+      path: "/brand",
+      name: "Marca",
+    },
+    {
+      path: "/category",
+      name: "Categoria",
+    },
+    {
+      path: "/logout",
+      name: "Cerrar sesion",
+    },
+    {
       path: "/movements",
       name: "Movimientos",
     }

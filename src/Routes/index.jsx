@@ -11,6 +11,10 @@ import Suppliers from '../Pages/Suppliers';
 import SupplierForm from '../Pages/Suppliers/edit';
 import Warehouses from '../Pages/Warehouses';
 import WarehousesForm from '../Pages/Warehouses/edit';
+import Brand from '../Pages/Brands/index';
+import BrandForm from '../Pages/Brands/edit';
+import Category from '../Pages/Category/index';
+import CategoryForm from '../Pages/Category/edit';
 import Movements from '../Pages/Movements';
 
 const router = createBrowserRouter([
@@ -33,7 +37,11 @@ const router = createBrowserRouter([
       { path: 'supplier-details', element: <SupplierForm /> },
       { path: 'warehouses', element: <Warehouses /> },
       { path: 'warehouse-details', element: <WarehousesForm /> },
-      {path:'movements', element: <Movements />}
+      { path: 'brand', element: <Brand /> },
+      { path: 'brand-details', element: <BrandForm /> },
+      { path: 'category', element: <Category /> },
+      { path: 'category-details', element: <CategoryForm /> },
+      { path:'movements', element: <Movements />}
     ]
   }
 ]);
