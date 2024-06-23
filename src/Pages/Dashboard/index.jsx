@@ -3,8 +3,6 @@ import { useAuthentication } from "../../store/useAuthentication";
 import Loader from "../../Components/Loader/loader";
 import './index.css';
 import { useEffect } from "react"
-import { Outlet } from "react-router-dom";
-import Loader from "../../Components/Loader/loader";
 import useStoreGlobal from "../../store/useStoreGlobal";
 import { db } from "../../firebase";
 import {
@@ -37,10 +35,6 @@ function Dashboard() {
     {
       path: "/movements",
       name: "Movimientos",
-    },
-    {
-      path: "/logout",
-      name: "Cerrar sesion",
     }
   ]
   
