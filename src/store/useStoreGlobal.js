@@ -22,6 +22,9 @@ const useStoreGlobal = create((set) => ({
   //   set((state) => ({
   //     contacts: state.contacts.filter((contact) => contact.id !== contactId),
   //   })),
+
+  listMovements: [],
+  setMovements: (movements) => set({ listMovements: movements }),
 }));
 
 export default useStoreGlobal;
