@@ -151,19 +151,19 @@ const InformStock = () => {
       <div className="chart-card">
         <h2 className="chart-title">Stock de inventario</h2>
         <div className="chart">
-          {data != null && <Bar data={data} options={options} />}
+          {!!data && <Bar data={data} options={options} />}
         </div>
       </div>
       <div className="chart-card">
         <h2 className="chart-title">Compras de inventario</h2>
         <div className="chart">
-          {dataMovents != null && <Bar data={dataMovents} options={options} />}
+          {!!dataMovents && <Bar data={dataMovents} options={options} />}
         </div>
       </div>
       <div className="chart-card">
         <h2 className="chart-title">Venta de inventario</h2>
         <div className="chart">
-          {dataMoventsSell != null && (
+          {!!dataMoventsSell && (
             <Bar data={dataMoventsSell} options={options} />
           )}
         </div>
