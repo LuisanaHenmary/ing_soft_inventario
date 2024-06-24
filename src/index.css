@@ -13,56 +13,337 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+/* MainContent.css */
+.main-content {
+  padding: 20px;
+  flex: 1;
+}
+
+/* Suppliors.css */
+.suppliers {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.suppliers__header {
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.suppliers__title {
+  font-size: 24px;
+  margin: 0;
+  color: #333;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.suppliers__add-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: background-color 0.3s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.suppliers__add-button:hover {
+  background-color: #0056b3;
+}
+
+.suppliers__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.suppliers__list-header,
+.suppliers__item {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  align-items: center;
+}
+
+.suppliers__list-header {
+  background-color: #0056b3;
+  font-weight: bold;
+}
+
+.suppliers__name {
+  font-size: 16px;
+  color: #333;
+}
+
+.suppliers__buttons {
+  text-align: right;
+}
+
+.suppliers__button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.suppliers__delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.suppliers__delete:hover {
+  background-color: #c82333;
+}
+
+.suppliers__show {
+  background-color: #28a745;
+  color: white;
+}
+
+.suppliers__show:hover {
+  background-color: #218838;
+}
+
+.suppliers__edit {
+  background-color: #ffc107;
+  color: black;
+}
+
+.suppliers__edit:hover {
+  background-color: #e0a800;
+}
+
+/* Warehouses.css */
+.warehouses {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.warehouses__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.warehouses__title {
+  font-size: 24px;
+  margin: 0;
+  color: #333;
+}
+
+.warehouses__add-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.warehouses__add-button:hover {
+  background-color: #0056b3;
+}
+
+.warehouses__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.warehouses__list-header,
+.warehouses__item {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.warehouses__list-header {
+  background-color: #0056b3;
+  font-weight: bold;
+}
+
+.warehouses__name,
+.warehouses__location,
+.warehouses__phone {
+  font-size: 16px;
+  color: #333;
+}
+
+.warehouses__buttons {
+  text-align: right;
+  display: flex;
+  gap: 5px;
+  justify-content: flex-start;
+}
+
+.warehouses__header-actions {
+  justify-self: flex-start;
+}
+
+.warehouses__button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.warehouses__delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.warehouses__delete:hover {
+  background-color: #c82333;
+}
+
+.warehouses__show {
+  background-color: #28a745;
+  color: white;
+}
+
+.warehouses__show:hover {
+  background-color: #218838;
+}
+
+.warehouses__edit {
+  background-color: #ffc107;
+  color: black;
+}
+
+.warehouses__edit:hover {
+  background-color: #e0a800;
+}
+
+/* SuppliersForm.css */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.contact-form__title {
+  text-align: center;
+}
+
+.contact-form__field {
+  margin-bottom: 15px;
+}
+
+.contact-form__field label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.contact-form__field input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.contact-form__submit {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.contact-form__actions {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  margin: 30px 0;
+}
+
+.contact-form__submit:hover {
+  background-color: #0056b3;
+}
+
+/* Loader.css */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  a:hover {
-    color: #747bff;
+  100% {
+    transform: rotate(360deg);
   }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+/* InformStock.css */
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+  height: 400px;
+}
+
+.chart-card {
+  width: calc(33.33% - 20px);
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.chart-title {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.chart {
+  height: 300px;
+}
+
+.Bar {
+  width: 100%;
+  height: 100%;
 }
