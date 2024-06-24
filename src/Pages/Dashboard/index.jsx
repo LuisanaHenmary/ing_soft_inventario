@@ -42,6 +42,10 @@ function Dashboard() {
       name: "Movimientos",
     },
     {
+      path: "/inform-stock",
+      name: "Reporte de Stock",
+    },
+    {
       path: "/logout",
       name: "Cerrar sesion",
     },

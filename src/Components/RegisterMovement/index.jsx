@@ -1,15 +1,16 @@
-import * as Yup from 'yup';
 import FormLayout from '../../layout/Form';
 import SelectField from '../SelectField';
 import { ButtonSubmit } from '../SubmitDialog';
 import useStoreGlobal from "../../store/useStoreGlobal";
 import { FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import { useEffect } from 'react';
+import { TextInputRequerid } from '../TextInput';
 
 
 const initialValues = {
     type_mov: 0,
     person: 0,
+    product: 0,
+    quantity: 0,
 };
 
 
@@ -17,12 +18,14 @@ const RegisterMovement = (props) => {
 
     const listSuppliers = useStoreGlobal((state) => state.listSuppliers);
     const listWarehouses = useStoreGlobal((state) => state.listWarehouses);
+    const listProducts = useStoreGlobal((state) => state.listProducts);
 
     const {
         saveFunction,
         isOpen,
         handleClose,
-        types_mov
+        types_mov,
+        
     } = props
 
     return (
@@ -55,9 +58,14 @@ const RegisterMovement = (props) => {
 
                         </div>
 
-                        {parseInt(formik.values.type_mov) === 0 ? <SelectField name="person" label="Proveedor" formik={formik} options={listSuppliers} /> :
-                            <SelectField name="person" label="Almacen" formik={formik} options={listWarehouses} />
+                        {parseInt(formik.values.type_mov) === 0 ?  
+                          <SelectField name="person" label="Proveedor" formik={formik} options={listSuppliers} />
+                          :
+                          <SelectField name="person" label="Almacen" formik={formik} options={listWarehouses} />
                         }
+
+                        <SelectField name="product" label="Producto" formik={formik} options={listProducts} />
+                        <TextInputRequerid name="quantity" label="Cantidad" formik={formik} />
 
                         <ButtonSubmit name_action="Agregar" />
                     </form>
