@@ -6,6 +6,8 @@ import {
   signInWithEmailAndPassword,
   signOut
 } from 'firebase/auth';
+import { db } from '../firebase';
+import { setDoc, doc } from 'firebase/firestore';
 
 export const useAuthentication = create(
   persist(
@@ -14,26 +16,31 @@ export const useAuthentication = create(
       error: null,
       login: async (email, password) => {
         try {
-          const { user } = await signInWithEmailAndPassword(
+          const { user: { uid } } = await signInWithEmailAndPassword(
             FirebaseAuth,
             email,
             password
           );
-          set({ userID: user, error: null });
+          set({ userID: uid, error: null });
         } catch (error) {
           window.alert('Ususrio o contraseña incorrectos');
           set({ error: error.message });
         }
       },
-      register: async (email, password) => {
+      register: async (name, email, password) => {
         try {
-          const { user } = await createUserWithEmailAndPassword(
+          const { user: uid } = await createUserWithEmailAndPassword(
             FirebaseAuth,
             email,
             password
           );
-          console.log(user);
-          set({ userID: user.uid, error: null });
+          await setDoc(doc(db, 'users', uid), {
+            uid,
+            name,
+            email,
+            rol: '0'
+          })
+          set({ userID: uid, error: null });
         } catch (error) {
           window.alert('Email ya registrado');
           set({ error: error.message });

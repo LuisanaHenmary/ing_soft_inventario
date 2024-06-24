@@ -2,14 +2,16 @@ import { Link, useNavigate, Outlet } from "react-router-dom";
 import { useAuthentication } from "../../store/useAuthentication";
 import Loader from "../../Components/Loader/loader";
 import "./index.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useStoreGlobal from "../../store/useStoreGlobal";
 import { db } from "../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 function Dashboard() {
-  const logout = useAuthentication((state) => state.logout);
+  const { logout, userID } = useAuthentication();
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [rolUser, setRolUser] = useState("");
 
   const rutes = [
     {
@@ -130,29 +132,62 @@ function Dashboard() {
     }
   };
 
+  const getUserData = async () => {
+    try {
+      const docRef = doc(db, "users", userID);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.data().uid === userID) {
+        setName(docSnap.data().name);
+        setRolUser(docSnap.data().rol);
+      }
+    } catch (error) {
+      console.error("Error checking document: ", error);
+    }
+  }
+
   useEffect(() => {
     setLoader(true);
     getAllList();
   }, []);
 
+  useEffect(() => {
+    getUserData();
+  },[])
+
   return (
-    <div className="dashboard">
-      <div className="sidebar">
+    <section className="dashboard">
+      <article className="sidebar">
         <div className="sidebar__logo">Dashboard</div>
         <ul className="sidebar__menu">
           {rutes.map((route) => (
             <li className="sidebar__menu-item" key={route.path}>
-              <Link to={`/dashboard${route.path}`}>{route.name}</Link>
+              <Link to={`/dashboard${route.path}`}>
+                {route.name}
+              </Link>
             </li>
           ))}
-          <button className="sidebar__menu-item_button" onClick={handleLogout}>
-            Logout
+          <button
+            className="sidebar__menu-item_button"
+            onClick={handleLogout}
+          >
+            Cerrar sesion
           </button>
         </ul>
-      </div>
-      <Outlet />
+      </article>
+      <article className="sidebar__nav">
+        <div className="sidebar__nav-menu">
+          <h3 className="sidebar__nav-menu_title">
+            { name }
+          </h3>
+          <span className="sidebar__nav-menu_role">
+            { rolUser === "1" ? "Administrador" : "Usuario" }
+          </span>
+        </div>
+        <Outlet />
+      </article>
       <Loader />
-    </div>
+    </section>
   );
 }
 

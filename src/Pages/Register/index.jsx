@@ -29,7 +29,7 @@ function Register() {
       console.log("Passwords do not match");
       return;
     }
-    register(formData.email, formData.password)
+    register(formData.name, formData.email, formData.password)
 
   };
 
