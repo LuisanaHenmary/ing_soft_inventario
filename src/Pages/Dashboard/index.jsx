@@ -43,6 +43,14 @@ function Dashboard() {
       path: "/movements",
       name: "Movimientos",
     },
+    {
+      path: "/inform-stock",
+      name: "Reporte de Stock",
+    },
+    {
+      path: "/logout",
+      name: "Cerrar sesion",
+    },
   ];
 
   const handleLogout = async () => {
