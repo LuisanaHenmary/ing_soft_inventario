@@ -141,7 +141,7 @@ function Dashboard() {
               <Link to={`/dashboard${route.path}`}>{route.name}</Link>
             </li>
           ))}
-          <button className="sidebar__menu-item_button" onClick={handleLogout}>
+          <button className="sidebar__menu-item_button" onClick={handleLogout} style={{color:"white"}}>
             Logout
           </button>
         </ul>
