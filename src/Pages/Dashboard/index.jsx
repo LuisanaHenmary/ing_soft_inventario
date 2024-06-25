@@ -13,6 +13,10 @@ function Dashboard() {
 
   const rutes = [
     {
+      path: "/",
+      name: "Dashboard",
+    },
+    {
       path: "/products",
       name: "Productos",
     },
